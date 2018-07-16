@@ -37,13 +37,11 @@ var resizeService = {
             console.log("Resize started finished");
         }
         transform.toFile(output).then(info => {
-            console.log('Successfull to create '.output);
-        })
-            .catch(err => {
-                console.log('Failed to create '.output);
-            });
+            console.log('Successfull to create ' + output);
+        }).catch(err => {
+            console.log('Failed to create ' + output);
+        });
     }
-
 }
 
 module.exports = resizeService;

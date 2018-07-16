@@ -5,8 +5,11 @@ var videoshow = require('videoshow')
 /* GET users listing. */
 router.get('/', function (req, res, next) {
 
-  var targetVideo = "targetVideo1.mp4";
+  var targetVideo = "target/targetVideo1.mp4";
+  var song = "source/song.mp3";
+  var subtitle = "source/subtitles.ass";
   console.log('video starts');
+  
   var images = [
     './target/target1.jpg',
     './target/target2.jpg',
@@ -29,7 +32,8 @@ router.get('/', function (req, res, next) {
   }
 
   videoshow(images, videoOptions)
-    .audio('song.mp3')
+    .subtitles(subtitle)
+    .audio(song)
     .save(targetVideo)
     .on('start', function (command) {
       console.log('ffmpeg process started:', command)
