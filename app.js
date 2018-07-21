@@ -7,6 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var resizeRouter = require('./routes/resize-route');
 var videoRouter = require('./routes/video-route');
+var webscrapeRouter = require('./routes/webscrape-route');
 
 var app = express();
 
@@ -23,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/resize', resizeRouter);
 app.use('/video', videoRouter);
+app.use('/scrape', webscrapeRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

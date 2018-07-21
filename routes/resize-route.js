@@ -21,10 +21,11 @@ router.get('/', function (req, res, next) {
      // const readStream = fs.createReadStream(path);
 
    
-    resizeService.resize("./source/step1.jpg", "./target/target1.jpg");
-    resizeService.resize("./source/step2.jpg", "./target/target2.jpg");
-    resizeService.resize("./source/step3.jpg", "./target/target3.jpg");
-    resizeService.resize("./source/step4.jpg", "./target/target4.jpg");
+    // resizeService.resize("./source/step1.jpg", "./target/target1.jpg");
+    // resizeService.resize("./source/step2.jpg", "./target/target2.jpg");
+    // resizeService.resize("./source/step3.jpg", "./target/target3.jpg");
+    // resizeService.resize("./source/step4.jpg", "./target/target4.jpg");
+    resizeService.resize("https://rukminim1.flixcart.com/image/400/400/jepzrm80/smartwatch/5/h/b/m9-black-am31-mobile-link-original-imaf2qgxwhy3m8ev.jpeg?q=90", "./target/target55.jpg");
     return;
 });
 
