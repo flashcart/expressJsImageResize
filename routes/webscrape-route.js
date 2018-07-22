@@ -12,7 +12,7 @@ router.get('/', function (req, res, next) {
     console.log(req.query.url);
     let url = req.query.url;
     downloadService.images(url);
-    // downloadService.description(url);
+    downloadService.description(url);
     res.send('Url : <a target="_blank" href="' + url+'" >' + url + '</a>');
 });
 

@@ -34,7 +34,7 @@ var resizeService = {
             transform = transform.embed();
 
             // transform = transform.crop(sharp.strategy.entropy);
-            console.log("Resize started finished");
+            // console.log("Resize started finished");
         }
         transform.toFile(output).then(info => {
             console.log('Successfull to create ' + output);
