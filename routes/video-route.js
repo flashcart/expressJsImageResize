@@ -7,7 +7,7 @@ const targetDir = "./target";
 router.get('/', function (req, res, next) {
   var path = req.query.path;
   var currentItemDir = targetDir.concat('/banggood/').concat(path);
-  videService.create(currentItemDir.concat("/video"));
+  videService.create(currentItemDir.concat("/video"), path);
   
   res.send('respond with a resource');
 });

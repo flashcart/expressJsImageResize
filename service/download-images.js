@@ -4,7 +4,8 @@ const path = require('path');
 const scraperjs = require('scraperjs');
 const targetPath = "./target/";
 var destDir = null;
-
+var currentSiteUrl = null;
+ 
 var download = {
     images: function (siteUrl) {
         downloadImages(siteUrl);
@@ -20,6 +21,7 @@ var downloadDescription = function (siteUrl) {
 
     console.log("scrapping description from: " + siteUrl);
     destDir = targetPath;
+    currentSiteUrl = siteUrl;
     synchDirectory(siteUrl);
 
     scraperjs.StaticScraper.create(siteUrl)
@@ -37,13 +39,19 @@ var descriptionResultHandler = function (res) {
     console.log(destDir);
     // console.log(res);
     var resString = String(res);
+    resString=  decodeURIComponent(escape(resString));
+
+    resString = resString.replace(/&#xA0;/gm, ' ');
+    resString = resString.replace(/&#x2466;/gm, ' ');
     resString = resString.replace(/(\t)/gm, ""); // remove tab
     
     var filePath = destDir.concat('description.txt');
     var writeStream = fs.createWriteStream(filePath);
+    writeStream.write(currentSiteUrl);
     writeStream.write(resString);
     writeStream.end();
 
+    // FORMATTED
     resString = resString.replace(/<(?:.|\n)*?>/gm, '\n');
 
     resString = resString.replace(/(\r\n|\r|\n){2,}/g, '\n'); // remove newline if more than 1
@@ -51,13 +59,17 @@ var descriptionResultHandler = function (res) {
     
     var filePath = destDir.concat('formated-description.txt');
     var writeStream = fs.createWriteStream(filePath);
+    writeStream.write("BUY " + currentSiteUrl + "\n\r") ;
     writeStream.write(resString);
+    writeStream.write("BUY " + currentSiteUrl + "\n\r") ;
+    
     writeStream.end();
 
     // fs.readFile(filePath, 'utf8', function(err, data) {
     //     console.log(data);
     // });
 }
+ 
 
 var downloadImages = function (siteUrl) {
 

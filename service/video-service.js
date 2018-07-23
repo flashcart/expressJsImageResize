@@ -3,7 +3,7 @@ var videoshow = require('videoshow');
 
 var videoService = {
 
-    create: function (sourceDir) {
+    create: function (sourceDir, path) {
         var targetVideo = sourceDir.concat("/").concat("video.mp4");
         var song = "source/song.mp3";
         var subtitle = "source/subtitles.ass";

@@ -13,7 +13,10 @@ router.get('/', function (req, res, next) {
     let url = req.query.url;
     downloadService.images(url);
     downloadService.description(url);
-    res.send('Url : <a target="_blank" href="' + url+'" >' + url + '</a>');
+    var resString = 'Url : <a target="_blank" href="' + url+'" >' + url + '</a>';
+    var folderName = url.substr(url.lastIndexOf('/') + 1);
+    resString += '<br> Next step : <a target="_blank" href="/resize?path=' + folderName+'" >Resize</a>' ;
+    res.send(resString);
 });
 
 module.exports = router;

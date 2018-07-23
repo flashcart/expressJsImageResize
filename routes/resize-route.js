@@ -15,18 +15,30 @@ router.get('/', function (req, res, next) {
   console.log('video starts');
  var path = req.query.path;
   var currentItemDir = targetDir.concat('/banggood/').concat(path);
+  var videoDir = currentItemDir.concat("/video/");
+  mkdirSync(videoDir);
   fs.readdirSync(currentItemDir).forEach(file => {
     if (file.indexOf(".jpg") !== -1) {
       // console.log("source: " + currentItemDir.concat(file));
       // console.log("Target: " + currentItemDir.concat("/video/").concat(file));
-      resizeService.resize(currentItemDir.concat("/").concat(file), currentItemDir.concat("/video/").concat(file));
+      resizeService.resize(currentItemDir.concat("/").concat(file), videoDir.concat("/").concat(file));
     }
   });
   
-  // videService.create(currentItemDir.concat("/video"));
+  // videService.create(videoDir);
   
   // resizeService.resize("https://rukminim1.flixcart.com/image/400/400/jepzrm80/smartwatch/5/h/b/m9-black-am31-mobile-link-original-imaf2qgxwhy3m8ev.jpeg?q=90", "./target/target55.jpg");
-  res.send('Done');
+  var resString = '<br> Next step : <a target="_blank" href="/video?path=' + path+'" >Video</a>' ;
+  res.send(resString);
 });
+
+const mkdirSync = function (dirPath) {
+    try {
+        fs.mkdirSync(dirPath)
+    } catch (err) {
+        if (err.code !== 'EEXIST') throw err
+    }
+}
+
 
 module.exports = router;

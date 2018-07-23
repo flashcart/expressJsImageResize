@@ -8,6 +8,7 @@ var resizeService = {
     resize: function (path, output) {
 
 
+
         const widthString = "1200";
         const heightString = "1200";
 
