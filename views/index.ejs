@@ -7,5 +7,17 @@
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+    <form method="post" action="/scrape" novalidate>
+      <div class="form-field">
+        <label for="message">Message</label>
+        <textarea class="input" id="siteUrl" name="siteUrl" rows="8" style="width:100%;"  autofocus></textarea>
+      </div>
+      <div class="form-field">
+       
+      </div>
+      <div class="form-actions">
+        <button class="btn" type="submit">Send</button>
+      </div>
+    </form>
   </body>
 </html>

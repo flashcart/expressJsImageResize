@@ -19,7 +19,7 @@ var videoService = {
         // ]
         fs.readdirSync(sourceDir).forEach(file => {
             console.log(file);
-            if (file.indexOf(".jpg") !== -1) {
+            if (file.indexOf(".jpg") !== -1 || file.indexOf('.jpeg') != -1 || file.indexOf('.JPG') != -1) {
                 //  console.log(sourceDir.concat("/").concat(file));
                 images.push(sourceDir.concat("/").concat(file));
                 // resizeService.resize(sourceDir.concat("/").concat(file), currentItemDir.concat("/video/").concat(file));

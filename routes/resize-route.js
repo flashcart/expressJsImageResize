@@ -18,7 +18,7 @@ router.get('/', function (req, res, next) {
   var videoDir = currentItemDir.concat("/video/");
   mkdirSync(videoDir);
   fs.readdirSync(currentItemDir).forEach(file => {
-    if (file.indexOf(".jpg") !== -1) {
+    if (file.indexOf(".jpg") !== -1 || file.indexOf('.jpeg') != -1 || file.indexOf('.JPG') != -1) {
       // console.log("source: " + currentItemDir.concat(file));
       // console.log("Target: " + currentItemDir.concat("/video/").concat(file));
       resizeService.resize(currentItemDir.concat("/").concat(file), videoDir.concat("/").concat(file));
