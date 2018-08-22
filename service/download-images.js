@@ -2,13 +2,13 @@ const fs = require('fs');
 const request = require('request');
 const path = require('path');
 const scraperjs = require('scraperjs');
-const targetPath = "./target/";
+// const targetPath = "./target/";
 var destDir = null;
 var currentSiteUrl = null;
  
 var download = {
-    images: function (siteUrl) {
-        downloadImages(siteUrl);
+    images: function (siteUrl, tarDir) {
+        downloadImages(siteUrl, tarDir);
     },
     description: function (siteUrl) {
         downloadDescription(siteUrl);
@@ -17,73 +17,50 @@ var download = {
 
 module.exports = download;
 
-var downloadDescription = function (siteUrl) {
+// var downloadDescription = function (siteUrl) {
 
-    console.log("scrapping description from: " + siteUrl);
-    destDir = targetPath;
-    currentSiteUrl = siteUrl;
-    synchDirectory(siteUrl);
+//     console.log("scrapping description from: " + siteUrl);
+//     destDir = targetPath;
+//     currentSiteUrl = siteUrl;
+//     synchDirectory(siteUrl);
 
-    scraperjs.StaticScraper.create(siteUrl)
-        .scrape(function ($) {
-            return $("div#productDetails").map(function () {
-                return $(this).html();
-            }).get();
-        })
-        .then(descriptionResultHandler);
+//     scraperjs.StaticScraper.create(siteUrl)
+//         .scrape(function ($) {
+//             return $("div#productDetails").map(function () {
+//                 return $(this).html();
+//             }).get();
+//         })
+//         .then(descriptionResultHandler);
 
-}
+// }
 
-var descriptionResultHandler = function (res) {
-    console.log("destDir");
-    console.log(destDir);
-    // console.log(res);
-    var resString = String(res);
-    resString=  decodeURIComponent(escape(resString));
 
-    resString = resString.replace(/&#xA0;/gm, ' ');
-    resString = resString.replace(/&#x2466;/gm, ' ');
-    resString = resString.replace(/(\t)/gm, ""); // remove tab
-    
-    var filePath = destDir.concat('description.txt');
-    var writeStream = fs.createWriteStream(filePath);
-    writeStream.write(currentSiteUrl);
-    writeStream.write(resString);
-    writeStream.end();
-
-    // FORMATTED
-    resString = resString.replace(/<(?:.|\n)*?>/gm, '\n');
-
-    resString = resString.replace(/(\r\n|\r|\n){2,}/g, '\n'); // remove newline if more than 1
-    // resString = resString.replace(/(\r\n\t|\n|\r\t)/gm, "");
-    
-    var filePath = destDir.concat('formated-description.txt');
-    var writeStream = fs.createWriteStream(filePath);
-    writeStream.write("BUY " + currentSiteUrl + "\n\r") ;
-    writeStream.write(resString);
-    writeStream.write("BUY " + currentSiteUrl + "\n\r") ;
-    
-    writeStream.end();
-
-    // fs.readFile(filePath, 'utf8', function(err, data) {
-    //     console.log(data);
-    // });
-}
- 
-
-var downloadImages = function (siteUrl) {
+var downloadImages = function (siteUrl, tarDir) {
 
     console.log("scrapping images");
-    destDir = targetPath;
-    synchDirectory(siteUrl);
+    destDir = tarDir;
+    currentSiteUrl = siteUrl;
 
     scraperjs.StaticScraper.create(siteUrl)
         .scrape(function ($) {
-            return $(".description img").map(function () {
-                return $(this).attr('src');
+
+            var images = $(".description img").map(function () {
+                return $(this).attr('data-src');
             }).get();
+
+            var description = $("div#productDetails").map(function () {
+                return $(this).html();
+            }).get();
+            
+            return { images: images, description: description };
+
         })
-        .then(imageResultHandler);
+        .then(resultHandler);
+}
+
+var resultHandler = function (res) {
+    imageResultHandler(res.images);
+    descriptionResultHandler(res.description);
 }
 
 var imageResultHandler = function (res) {
@@ -96,7 +73,7 @@ var imageResultHandler = function (res) {
             continue;
         }
         var fileName = imageUrl.substr(imageUrl.lastIndexOf('/') + 1);
-        var filePath = destDir.concat(fileName);
+        var filePath = destDir.concat('/').concat(fileName);
         download(imageUrl, filePath, function () {
             console.log('Dowloaded File: ' + filePath);
         });
@@ -104,15 +81,43 @@ var imageResultHandler = function (res) {
 
 }
 
-function synchDirectory(siteUrl) {
-    if (siteUrl.lastIndexOf('banggood') != -1) {
-        destDir = destDir.concat("banggood/");
-        mkdirSync(path.resolve(destDir));
-        var folderName = siteUrl.substr(siteUrl.lastIndexOf('/') + 1);
-        destDir = destDir.concat(folderName).concat("/");
-        mkdirSync(path.resolve(destDir));
-    }
+
+var descriptionResultHandler = function (res) {
+    var destDescDir = destDir.concat("/video");
+    console.log("destDescDir: " + destDescDir);
+    // console.log(res);
+    var resString = String(res);
+    resString=  decodeURIComponent(escape(resString));
+
+    resString = resString.replace(/&#xA0;/gm, ' ');
+    resString = resString.replace(/&#x2466;/gm, ' ');
+    resString = resString.replace(/(\t)/gm, ""); // remove tab
+    
+    var filePath = destDescDir.concat('/description.txt');
+    var writeStream = fs.createWriteStream(filePath);
+    writeStream.write(currentSiteUrl);
+    writeStream.write(resString);
+    writeStream.end();
+
+    // FORMATTED
+    resString = resString.replace(/<(?:.|\n)*?>/gm, '\n');
+
+    resString = resString.replace(/(\r\n|\r|\n){2,}/g, '\n'); // remove newline if more than 1
+    // resString = resString.replace(/(\r\n\t|\n|\r\t)/gm, "");
+    
+    var filePath = destDescDir.concat('/formated-description.txt');
+    var writeStream = fs.createWriteStream(filePath);
+    writeStream.write("BUY " + currentSiteUrl + "\n\r") ;
+    writeStream.write(resString);
+    writeStream.write("BUY " + currentSiteUrl + "\n\r") ;
+    
+    writeStream.end();
+
+    // fs.readFile(filePath, 'utf8', function(err, data) {
+    //     console.log(data);
+    // });
 }
+ 
 
 function isBlank(str) {
     return (!str || /^\s*$/.test(str));

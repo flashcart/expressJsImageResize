@@ -5,9 +5,9 @@ const targetDir = "./target";
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-  var path = req.query.path;
-  var currentItemDir = targetDir.concat('/banggood/').concat(path);
-  videService.create(currentItemDir.concat("/video"), path);
+  var pathParam = req.query.path;
+  var currentItemDir = targetDir.concat('/all/').concat(pathParam);
+  videService.create(currentItemDir.concat("/video"));
   
   res.send('respond with a resource');
 });

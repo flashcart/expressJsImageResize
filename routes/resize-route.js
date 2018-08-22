@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
 
   console.log('video starts');
  var path = req.query.path;
-  var currentItemDir = targetDir.concat('/banggood/').concat(path);
+  var currentItemDir = targetDir.concat('/all/').concat(path);
   var videoDir = currentItemDir.concat("/video/");
   mkdirSync(videoDir);
   fs.readdirSync(currentItemDir).forEach(file => {
