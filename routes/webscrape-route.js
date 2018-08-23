@@ -37,7 +37,7 @@ function doAction(url) {
     downloadService.images(url, prodDir);
     // downloadService.description(url, folderName.concat("/video"));
     setTimeout(() => resizeService.resizeAll(prodDir, prodDir.concat('/video')), 8000);
-    setTimeout(() => videoService.create(prodDir), 20000);
+    setTimeout(() => videoService.create(prodDir.concat('/video')), 20000);
 
     var resString = 'Url : <a target="_blank" href="' + url + '" >' + url + '</a>';
     var folderName = url.substr(url.lastIndexOf('/') + 1);

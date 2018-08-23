@@ -44,15 +44,26 @@ var downloadImages = function (siteUrl, tarDir) {
     scraperjs.StaticScraper.create(siteUrl)
         .scrape(function ($) {
 
+            var title = $("h1 span").map(function () {
+                return $(this).html();
+            }).get();
+
             var images = $(".description img").map(function () {
                 return $(this).attr('data-src');
             }).get();
+
+            if(images.length == 0){
+
+            images = $(".description img").map(function () {
+                    return $(this).attr('src');
+                }).get();
+            }
 
             var description = $("div#productDetails").map(function () {
                 return $(this).html();
             }).get();
             
-            return { images: images, description: description };
+            return { title: title, images: images, description: description };
 
         })
         .then(resultHandler);
@@ -60,7 +71,7 @@ var downloadImages = function (siteUrl, tarDir) {
 
 var resultHandler = function (res) {
     imageResultHandler(res.images);
-    descriptionResultHandler(res.description);
+    descriptionResultHandler(res.description, res.title);
 }
 
 var imageResultHandler = function (res) {
@@ -69,6 +80,10 @@ var imageResultHandler = function (res) {
     for (var i = 0; i <= res.length - 1; i++) {
         console.log("Downloading image: " + res[i]);
         var imageUrl = res[i];
+        if(imageUrl.includes('png')){
+            continue;
+        }
+
         if (isBlank(imageUrl)) {
             continue;
         }
@@ -82,7 +97,7 @@ var imageResultHandler = function (res) {
 }
 
 
-var descriptionResultHandler = function (res) {
+var descriptionResultHandler = function (res, title) {
     var destDescDir = destDir.concat("/video");
     console.log("destDescDir: " + destDescDir);
     // console.log(res);
@@ -108,14 +123,11 @@ var descriptionResultHandler = function (res) {
     var filePath = destDescDir.concat('/formated-description.txt');
     var writeStream = fs.createWriteStream(filePath);
     writeStream.write("BUY " + currentSiteUrl + "\n\r") ;
+    writeStream.write(title + "\n") ;
+    
     writeStream.write(resString);
     writeStream.write("BUY " + currentSiteUrl + "\n\r") ;
-    
     writeStream.end();
-
-    // fs.readFile(filePath, 'utf8', function(err, data) {
-    //     console.log(data);
-    // });
 }
  
 
