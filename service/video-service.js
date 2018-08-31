@@ -6,7 +6,11 @@ var videoService = {
     create: function (sourceDir) {
         console.log('video starts: ' + sourceDir);
 
-        var targetVideo = sourceDir.concat("/").concat("video.mp4");
+        var tempArr =sourceDir.split('/');
+        var videoFileName = tempArr[tempArr.length -2];
+        videoFileName = videoFileName.substr(0, 50);
+        console.log('Video filename: ' + videoFileName);
+        var targetVideo = sourceDir.concat("/").concat(videoFileName).concat(".mp4");
         var song = "source/song.mp3";
         var subtitle = "source/subtitles.ass";
         

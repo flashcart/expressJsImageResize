@@ -106,6 +106,11 @@ var descriptionResultHandler = function (res, title) {
 
     resString = resString.replace(/&#xA0;/gm, ' ');
     resString = resString.replace(/&#x2466;/gm, ' ');
+    resString = resString.replace(/&#x2022;/gm, ' ');
+    resString = resString.replace(/&#x25CF;/gm, ' ');
+    resString = resString.replace(/&#x2019;/gm, '\'');
+    resString = resString.replace(/    /gm, '');
+                
     resString = resString.replace(/(\t)/gm, ""); // remove tab
     
     var filePath = destDescDir.concat('/description.txt');

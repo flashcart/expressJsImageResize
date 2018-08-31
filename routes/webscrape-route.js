@@ -36,13 +36,13 @@ function doAction(url) {
     var prodDir = targetDir.concat("/all/").concat(folderName);
     downloadService.images(url, prodDir);
     // downloadService.description(url, folderName.concat("/video"));
-    setTimeout(() => resizeService.resizeAll(prodDir, prodDir.concat('/video')), 8000);
+    setTimeout(() => resizeService.resizeAll(prodDir, prodDir.concat('/video')), 10000);
     setTimeout(() => videoService.create(prodDir.concat('/video')), 20000);
 
     var resString = 'Url : <a target="_blank" href="' + url + '" >' + url + '</a>';
     var folderName = url.substr(url.lastIndexOf('/') + 1);
     resString += '<br> Next step : <a target="_blank" href="/resize?path=' + folderName + '" >Resize</a>';
-    resString += '<br> Next step : <a target="_blank" href="/video?path=' + path+'" >Video</a>' ;
+    resString += '<br> Next step : <a target="_blank" href="/video?path=' + folderName+'" >Video</a>' ;
      
     return resString;
 }
